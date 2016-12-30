@@ -1,0 +1,16 @@
+Event     A difference between a sample and the reference genome; usually a 
+          SNP or an SNV.
+
+Genotype  the genotype (0/0, 0/1, 5/78 or whatever indicates which allele(s) a
+          sample is supposed to have, the reference allele being numbered 0,
+          the (different) alternative alleles being numbered 1, 2, 3 etc. Note
+          that a genotype can both be diploid (2 alleles, the normal situation)
+          and haploid (certain situations, like germ cells, or men who have only
+          1 X chromosome and 1 Y chromosome).
+          
+MendelianQuality: object listing the number of occurrences of a certain class of
+          events in which they are correct or incorrect.
+          
+Support   Object that lists the raw support for each allele. So may be 15,4,0,2 
+          for the ref allele and the alt1, alt2 and alt3 alleles respectively. 
+          
