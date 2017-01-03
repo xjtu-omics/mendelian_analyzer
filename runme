@@ -1,0 +1,3 @@
+#!/bin/bash
+g++ Analyzer.cpp BioUtils.cpp Event.cpp Genotype.cpp GlobalSettings.cpp mendelian_analyzer.cpp Quality.cpp Support.cpp Utilities.cpp -o mendel -std=c++11
+
