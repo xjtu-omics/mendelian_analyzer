@@ -32,6 +32,11 @@ public:
   VariantType GetVariantType() const;
   bool ShouldAnalyzeVariant(const Event& event) const;
 private:
+
+  bool isTypeCorrect(int ref_size, int alt_size) const;
+  bool isSizeCorrect(int size) const;
+
+
   VariantType variant_type_;
   bool is_pindel_;
   int min_size_;

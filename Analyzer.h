@@ -21,6 +21,7 @@
 
 #include "Genotype.h"
 #include "GlobalSettings.h"
+#include "Quality.h"
 
 
 class Analyzer {
@@ -38,6 +39,11 @@ private:
   void ShowResults() const;
   void UpdateMendelianErrorMap(const Genotype& firstParentGenotype,
       const Genotype& secondParentGenotype, const Genotype& childGenotype);
+  void OutputBins() const;
+
+
+  static const int NUM_BINS = 40;
+  Quality bin_qualities_[NUM_BINS];
 
   int m_unknown;
   int m_mendelianCorrect;
@@ -47,6 +53,7 @@ private:
   int all_homref_;
   int event_count_;
   int trio_count_[4] = {0,0,0,0};
+
   const GlobalSettings* settings_;
   std::map<std::string, int> me_map_;
 };

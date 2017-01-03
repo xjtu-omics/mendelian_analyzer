@@ -72,6 +72,8 @@ void SystematicDisplay(const std::string& line) {
   } while (true);
 }
 
+
+
 /** Transforms a Vcf-type indicating string into the correct VcfType enum **/
 VcfType ParseVcfType(const std::string& vcf_type_as_string ) {
   if (vcf_type_as_string == "p") {

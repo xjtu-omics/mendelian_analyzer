@@ -107,6 +107,42 @@ GlobalSettings::~GlobalSettings() {
   // TODO Auto-generated destructor stub
 }
 
+/** is this event of a type that should be investigated? **/
+bool GlobalSettings::isTypeCorrect(int ref_size, int alt_size) const{
+  if (variant_type_ == ALL) {
+    return true;
+  }
+  else if (ref_size == 1 ) {
+
+    if (alt_size == 1) {
+      // ref size == 1, alt_size == 1. SNP
+      return (variant_type_ == SNP);
+    }
+    else {
+      // ref size == 1, alt size is greater than 1. Insertion!
+      return ((variant_type_ == SV) || (variant_type_ == INS));
+
+    }
+  }
+  else {
+    // ref size !=1. Deletion or RPL
+    if (alt_size == 1) {
+      // deletion
+      return ((variant_type_ == SV) || (variant_type_ == DEL));
+    }
+    else {
+      // replacement
+      return ((variant_type_ == SV) || (variant_type_ == RPL));
+    }
+  }
+}
+
+/** is the size of the event within acceptable bounds? **/
+bool GlobalSettings::isSizeCorrect(int size) const {
+  return Utilities::isInclusiveBetween(size, min_size_, max_size_);
+}
+
+
 /** Should this variant be analyzed? **/
 bool GlobalSettings::ShouldAnalyzeVariant(const Event& event) const {
 
@@ -117,33 +153,14 @@ bool GlobalSettings::ShouldAnalyzeVariant(const Event& event) const {
   }
   int ref_size = event.RefSize();
   int alt_size = event.AltSize();
-  if (variant_type_ == ALL) {
-    return true;
-  }
-  else if (ref_size == 1 ) {
 
-    if (alt_size == 1){
-      // ref size == 1, alt_size == 1. SNP
-      return (variant_type_ == SNP);
-    }
-    else {
-      // ref size == 1, alt size is greater than 1. Insertion!
-      return (((variant_type_ == SV) || (variant_type_ == INS)) &&
-          Utilities::isInclusiveBetween(alt_size, min_size_, max_size_));
-    }
+  int size_to_check = std::max(ref_size, alt_size);
+  if (size_to_check > 1) {
+    // no SNP
+    --size_to_check;
   }
-  else {
-    // ref size !=1. Deletion or RPL
-    if (alt_size == 1) {
-      return (((variant_type_ == SV) || (variant_type_ == DEL)) &&
-        Utilities::isInclusiveBetween(ref_size - 1, min_size_, max_size_));
-    }
-    else {
-      // alt_size != 1; replacement
-      return ((variant_type_ == SV) || (variant_type_ == RPL));
-    }
-  }
-  return false;
+
+  return (isTypeCorrect(ref_size,alt_size) && isSizeCorrect(size_to_check));
 }
 
 

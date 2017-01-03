@@ -143,6 +143,13 @@ void Analyzer::ShowMendelianErrorMap() const {
   }
 }
 
+/** Output the bins: what is the qualuity per bin? (currently, bins defined
+ * to contain VAF)
+ */
+void Analyzer::OutputBins() const {
+
+}
+
 /** show the counting results to the user. **/
 void Analyzer::ShowResults() const {
   std::cout << std::endl;
@@ -160,6 +167,7 @@ void Analyzer::ShowResults() const {
   std::cout << "Mendelian error rate including all-homref trios: "
         << 100.0 * m_mendelianError / (m_mendelianError + m_mendelianCorrect + all_homref_) << "%\n";
   ShowMendelianErrorMap();
+  OutputBins();
 }
 
 
