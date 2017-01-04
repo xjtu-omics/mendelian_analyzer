@@ -137,9 +137,16 @@ bool Analyzer::AnalyzeSamples(std::stringstream& ss, const std::string& line,
 
 /** Shows the counts of different Mendelian errors. **/
 void Analyzer::ShowMendelianErrorMap() const {
+  // first get total count of errors.
+  int error_total = 0;
+  for (std::map<std::string, int>::const_iterator it = me_map_.begin();
+        it != me_map_.end(); ++it) {
+    error_total += it->second;
+  }
   for (std::map<std::string, int>::const_iterator it = me_map_.begin();
       it != me_map_.end(); ++it) {
-    std::cout << it->first << ": " << it->second << std::endl;
+    std::cout << it->first << ": " << it->second << " ("
+        << 100 * it->second / static_cast<double>(error_total) << "%)" << std::endl;
   }
 }
 

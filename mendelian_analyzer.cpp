@@ -91,7 +91,7 @@ VcfType ParseVcfType(const std::string& vcf_type_as_string ) {
 int main(int argc, char** argv) {
 
   std::cout << "Analyzing the genotypes from the given trio-based VCF\n";
-  if (argc < 3) {
+  if (argc < 2) {
     std::cout << "Invalid number of arguments. At least one argument " <<
         "is needed, the name of the input file. Other possible arguments " <<
         "are 'pindel' (to correctly process pindel VCFs with -1,X and 0,0 " <<
