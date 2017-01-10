@@ -1,8 +1,13 @@
 /*
  * Quality.h
  *
+ * Contains an element that assesses the quality associated with a certain
+ * descriptor: how many individuals/samples possessing a certain value /
+ * value range of the descriptor have been called correctly or incorrectly.
+ *
  *  Created on: Dec 27, 2016
- *      Author: admin123
+ *      Author: Eric-Wubbo Lameijer, Xi'an Jiaotong University,
+ *              eric_wubbo@hotmail.com
  */
 
 #ifndef QUALITY_H_
@@ -17,10 +22,13 @@ public:
   Quality();
   virtual ~Quality();
 
-  void IncreaseCorrect();
-  void IncreaseIncorrect();
+  void AddOccurrence(bool success);
+  double GetCorrectnessFraction() const;
+
 
 private:
+  int GetTotalCalls() const;
+
   int correct_calls_;
   int incorrect_calls_;
 

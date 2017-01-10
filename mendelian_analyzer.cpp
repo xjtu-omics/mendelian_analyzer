@@ -1,3 +1,14 @@
+/*
+ * mendelian_analyzer.cpp
+ *
+ * Analyzes a VCF file containing trios in order to estimate the genotyping
+ * quality.
+ *
+ *  Created on: Jan 3, 2017
+ *      Author: Eric-Wubbo Lameijer, Xi'an Jiaotong University,
+ *              eric_wubbo@hotmail.com
+ */
+
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -7,25 +18,21 @@
 #include "Analyzer.h"
 #include "Event.h"
 #include "Genotype.h"
-#include "GlobalSettings.h"
+#include "Settings.h"
 #include "Support.h"
 #include "Utilities.h"
 
 
 
 
-GlobalSettings g_global_settings;
+Settings g_global_settings;
 
 enum VcfType {UNKNOWN, PINDEL, GATK};
 
 
 
 
-/* pauses (waits for user to press a key. **/
-void pause() {
-  char ch;
-  std::cin.get(ch);
-}
+
 
 
 /** Displays the 'role' of a sample (assuming trio data) based on its position
@@ -60,7 +67,7 @@ void SystematicDisplay(const std::string& line) {
     if (ss.fail()) {
       break;
     }
-    Genotype genotype(str, false);
+    Genotype genotype(str);
     Support support(str);
     std::cout << str << " (" << Role(sample_count) << "):"<< genotype << ", VAF: " << support.GetVaf() << "\n";
     ++sample_count;
@@ -91,7 +98,7 @@ VcfType ParseVcfType(const std::string& vcf_type_as_string ) {
 int main(int argc, char** argv) {
 
   std::cout << "Analyzing the genotypes from the given trio-based VCF\n";
-  if (argc < 2) {
+  if (argc < 3) {
     std::cout << "Invalid number of arguments. At least one argument " <<
         "is needed, the name of the input file. Other possible arguments " <<
         "are 'pindel' (to correctly process pindel VCFs with -1,X and 0,0 " <<
@@ -111,7 +118,7 @@ int main(int argc, char** argv) {
     g_global_settings.Complete();
 
     std::cout << "input " << nameOfInputFile;
-    Analyzer analyzer(nameOfInputFile, &g_global_settings);
+    Analyzer analyzer(nameOfInputFile, &g_global_settings, "output");
     analyzer.analyze();
   }
 

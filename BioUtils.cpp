@@ -1,8 +1,12 @@
 /*
  * BioUtils.cpp
  *
+ * Some generic utilities for analyzing biological data that don't really belong
+ * into a class like Genotype.
+ *
  *  Created on: Dec 27, 2016
- *      Author: admin123
+ *      Author: Eric-Wubbo Lameijer, Xi'an Jiaotong University,
+ *              eric_wubbo@hotmail.com
  */
 
 #include "BioUtils.h"
@@ -22,10 +26,10 @@ const int GENOTYPES_12 = 12;
     chromosome. **/
 static int getGenotypicDepthPattern(const Genotype& firstParentGenotype,
     const Genotype& secondParentGenotype) {
-  int firstDepth = firstParentGenotype.isUnknown() ?
-      0 : firstParentGenotype.getNumberOfAlleles();
-  int secondDepth = secondParentGenotype.isUnknown() ?
-        0 : secondParentGenotype.getNumberOfAlleles();
+  int firstDepth = firstParentGenotype.IsUnknown() ?
+      0 : firstParentGenotype.GetNumberOfAlleles();
+  int secondDepth = secondParentGenotype.IsUnknown() ?
+        0 : secondParentGenotype.GetNumberOfAlleles();
   if (firstDepth > secondDepth) {
     std::swap(firstDepth, secondDepth);
   }
@@ -39,16 +43,16 @@ static int getGenotypicDepthPattern(const Genotype& firstParentGenotype,
  * de novo mutation. **/
 bool canAssessMendelianCorrectness(const Genotype& firstParentGenotype,
     const Genotype& secondParentGenotype, const Genotype& childGenotype) {
-  if (childGenotype.isUnknown()) {
+  if (childGenotype.IsUnknown()) {
     return false;
   }
-  if (childGenotype.isHaploid()) { // son X or Y
+  if (childGenotype.IsHaploid()) { // son X or Y
     int genotypicDepthPattern =
         getGenotypicDepthPattern(firstParentGenotype, secondParentGenotype);
     return ((genotypicDepthPattern == GENOTYPES_01) || // Y chromosome son
             (genotypicDepthPattern == GENOTYPES_12)); // X chromosome son
   }
-  if (firstParentGenotype.isUnknown() || secondParentGenotype.isUnknown()) {
+  if (firstParentGenotype.IsUnknown() || secondParentGenotype.IsUnknown()) {
     return false;
   }
   // otherwise, we can check for Mendelian correctness
@@ -60,23 +64,23 @@ bool canAssessMendelianCorrectness(const Genotype& firstParentGenotype,
 bool canBeMendelianCorrect(const Genotype& firstParent,
     const Genotype& secondParent, const Genotype& child) {
 
-  int childsNumberOfAlleles = child.getNumberOfAlleles();
+  int childsNumberOfAlleles = child.GetNumberOfAlleles();
   if (childsNumberOfAlleles == 2) {
     // normal diploid inheritance
     if (
-        (firstParent.hasAllele(child.getAllele(0)) &&
-         secondParent.hasAllele(child.getAllele(1)) )
+        (firstParent.HasAllele(child.GetAllele(0)) &&
+         secondParent.HasAllele(child.GetAllele(1)) )
         ||
-         (firstParent.hasAllele(child.getAllele(1)) &&
-          secondParent.hasAllele(child.getAllele(0)) )
+         (firstParent.HasAllele(child.GetAllele(1)) &&
+          secondParent.HasAllele(child.GetAllele(0)) )
         ) {
       return true;
     }
   }
   else if (childsNumberOfAlleles == 1) {
     // haploid inheritance! Like male child on X and Y chromosome
-    return (firstParent.hasAllele(child.getAllele(0))||
-        secondParent.hasAllele(child.getAllele(0)));
+    return (firstParent.HasAllele(child.GetAllele(0))||
+        secondParent.HasAllele(child.GetAllele(0)));
   }
   else {
     Utilities::Require(false, "canBeMendelianCorrect error: cannot handle children "

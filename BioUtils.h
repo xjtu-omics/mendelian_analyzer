@@ -5,7 +5,8 @@
  * class, but that are biologically useful.
  *
  *  Created on: Dec 27, 2016
- *      Author: admin123
+ *      Author: Eric-Wubbo Lameijer, Xi'an Jiaotong University,
+ *              eric_wubbo@hotmail.com
  */
 
 #ifndef BIOUTILS_H_

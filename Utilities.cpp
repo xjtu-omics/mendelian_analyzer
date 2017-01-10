@@ -1,12 +1,17 @@
 /*
  * Utilities.cpp
  *
+ * Contains generic functions that would have been great if C++ had them, but
+ * as C++ does not (seem to) possess them, they are defined here.
+ *
  *  Created on: Dec 19, 2016
- *      Author: admin123
+ *      Author: Eric-Wubbo Lameijer, Xi'an Jiaotong University,
+ *              eric_wubbo@hotmail.com
  */
 
 #include "Utilities.h"
 
+#include <algorithm>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -25,6 +30,12 @@ std::string GetUntilFirstOccurrenceOf(const std::string& str,
     outputString = str.substr(0, charPos);
   }
   return outputString;
+}
+
+/* pauses (waits for user to press a key. **/
+void Pause() {
+  char ch;
+  std::cin.get(ch);
 }
 
 /** Utility function that halts/crashes the program, helps to catch bugs early.
@@ -87,6 +98,15 @@ bool StringStartsWith(const std::string& stringToBeAssessed,
   std::string startOfAssessableString =
       stringToBeAssessed.substr(0,subStringLength);
   return (startOfAssessableString.compare(putativeStart) == 0 );
+}
+
+/** Converts a string to lower case. Packages the STL alternative, just giving
+ * it a name reflecting its intention. **/
+//http://stackoverflow.com/questions/313970/how-to-convert-stdstring-to-lower-case
+std::string StringToLowerCase(const std::string& input) {
+  std::string output = input;
+  std::transform(input.begin(), input.end(), output.begin(), ::tolower);
+  return output;
 }
 
 

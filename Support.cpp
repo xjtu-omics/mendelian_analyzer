@@ -5,7 +5,8 @@
  * variant for a particular sample.
  *
  *  Created on: Dec 23, 2016
- *      Author: admin123
+ *      Author: Eric-Wubbo Lameijer, Xi'an Jiaotong University,
+ *              eric_wubbo@hotmail.com
  */
 
 #include "Support.h"
@@ -15,23 +16,32 @@
 
 #include "Utilities.h"
 
-/** Constructor **/
-Support::Support(const std::string& raw_genotype) {
-  const char SEPARATOR = ':';
-  size_t separator_pos = raw_genotype.find_first_of(SEPARATOR);
-  Utilities::Require(separator_pos != std::string::npos,
-      "Support constructor error: this genotype string does not seem to"\
-      "provide information on the number of supporting reads.");
-  std::string support_string = raw_genotype.substr(separator_pos + 1);
+std::ostream& operator<<(std::ostream& os, Support support) {
+  for (size_t index = 0; index < support.supports_.size(); ++index) {
+    os << support.supports_[index];
+    if (index < support.supports_.size() - 1) {
+      os << ",";
+    }
+  }
+  return os;
+}
+
+/** Constructor. Takes the 'miscellaneous info' part of the genotype string.
+ * So if the full VCF genotyping string is "0/1:15,25", then the constructor
+ * takes "15,25" as input. **/
+Support::Support(const std::string& support_string) {
   std::vector<std::string> supports_as_strings = Utilities::Split(support_string,',');
   for (size_t index = 0; index < supports_as_strings.size(); ++index) {
     supports_.push_back(atoi(supports_as_strings[index].c_str()));
   }
+}
 
+/** To allow Support to be a regular data member of another class. **/
+Support::Support() {
 }
 
 /** returns the Variant Allele Frequency. **/
-double Support::GetVaf() {
+double Support::GetVaf() const {
   Utilities::Require(supports_.size() == 2,
       "Support::GetVaf error: there need to be two alleles to recover the"
       "variant allele frequency.");
@@ -48,7 +58,7 @@ double Support::GetVaf() {
 
 
 /** Returns the total support for all alleles at a certain position. **/
-int Support::GetTotalSupport() {
+int Support::GetTotalSupport() const {
   int total_support = 0;
   for (size_t index = 0; index < supports_.size(); ++index) {
     total_support += supports_[index];
@@ -56,7 +66,30 @@ int Support::GetTotalSupport() {
   return total_support;
 }
 
+/** In some cases, the support provided by Pindel indicates that we actually
+ * do not know the genotype, despite an official genotype call. **/
+bool Support::IndicatesUnknownGenotype() const {
+  if (supports_.size() == 0) {
+    return true;
+  }
+  else if (GetTotalSupport() == 0) {
+    return true;
+  }
+  else if (supports_[0] < 0 ) {
+    // pindel uses refcount of -1 to indicate a problem
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
 Support::~Support() {
   // TODO Auto-generated destructor stub
+}
+
+Support Support::NoSupport() {
+  Support dummy_support("");
+  return dummy_support;
 }
 

@@ -16,12 +16,18 @@
 #include <vector>
 
 class Support {
+friend std::ostream& operator<<(std::ostream& os, Support support);
+
+
 public:
   Support(const std::string& raw_genotype);
+  Support();
   virtual ~Support();
 
-  int GetTotalSupport();
-  double GetVaf();
+  int GetTotalSupport() const;
+  double GetVaf() const;
+  bool IndicatesUnknownGenotype() const;
+  static Support NoSupport();
 
 private:
   std::vector<int> supports_;

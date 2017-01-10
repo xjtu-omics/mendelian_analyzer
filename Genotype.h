@@ -21,18 +21,21 @@ class Genotype {
   friend std::ostream& operator<<(std::ostream& os, const Genotype& genotype);
 
 public:
-  Genotype(const std::string& genotypeAsString, bool isPindel);
+  Genotype(const std::string& genotypeAsString);
+  Genotype();
+  ~Genotype();
 
   std::string AsString() const;
-  int getAllele(int alleleIndex) const;
-  bool isHaploid() const;
-  bool hasAllele(int allele) const;
-  int getNumberOfAlleles() const;
-  bool isUnknown() const;
-  bool isHomRef() const;
+  int GetAllele(int alleleIndex) const;
+  bool IsHaploid() const;
+  bool HasAllele(int allele) const;
+  int GetNumberOfAlleles() const;
+  bool IsUnknown() const;
+  bool IsHomRef() const;
+  void SetToUnknown();
 
 private:
-  void setToUnknown();
+
   void AbortWhenUnknown() const;
 
   std::vector<int> m_alleles;

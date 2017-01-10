@@ -8,6 +8,10 @@ Genotype  the genotype (0/0, 0/1, 5/78 or whatever indicates which allele(s) a
           and haploid (certain situations, like germ cells, or men who have only
           1 X chromosome and 1 Y chromosome).
           
+GenotypingData
+          [Result? Info? Call?] The data gathered during the genotyping process,
+          which may include a genotype, support for the several alleles, etc. 
+          
 MendelianQuality: object listing the number of occurrences of a certain class of
           events in which they are correct or incorrect.
           

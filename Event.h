@@ -15,6 +15,10 @@
 #include <string>
 #include <vector>
 
+enum EventType { kUnknown, kSnp, kIns, kDel, kRpl };
+
+EventType GetEventTypeFromString(const std::string& input);
+
 class Event {
 public:
   Event(const std::string& reference, const std::string& alt);
@@ -23,6 +27,7 @@ public:
   bool HasSingleAltAllele() const;
   int RefSize() const;
   int AltSize() const;
+  EventType GetType() const;
 
 private:
   std::string reference_;
